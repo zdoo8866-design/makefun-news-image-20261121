@@ -4,76 +4,90 @@
 [![rank](https://make.fun/badge/news-image-20261121/zdoo8866-design/makefun-news-image-20261121/rank.svg)](https://make.fun/bounty/news-image-20261121/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
 [![reward](https://make.fun/badge/news-image-20261121/zdoo8866-design/makefun-news-image-20261121/reward.svg)](https://make.fun/bounty/news-image-20261121?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
 
-![The front page: six panels summing up 21 November 2026](entry.png)
+![The front page: 34 stories from Saturday 21 November 2026](entry.png)
 
-One 1024×1024 front page that sums up a single day of world news —
-**21 November 2026**, named in large type at the top. Six panels in a
-2×3 grid over one shared pale backdrop (a dawn sky over a calm sea),
-each with a drawn scene, a location tag, a headline, one line of fact,
-and the day's key number as a chip. The palette stays plain on purpose;
-colour is spent only on details — sparks in a tanker's plume, the amber
-screen in Geneva, the red critical line on a chalkboard, the yellow
-slides on a night tarmac.
+One 1024×1024 newspaper front page that sums up a single day of world
+news — **Saturday 21 November 2026** — in **34 stories**: a masthead and
+standfirst, a region tally (Europe 9 · Asia 8 · Middle East 7 ·
+Americas 5 · Oceania 2 · Africa 2 · Global 1), the day in numbers,
+**13 drawn story cards**, a *Where It Happened* map whose numbered pins
+match the cards, **21 one-line briefs**, and a red **Date Check** box
+that lists what was left out as other days' news. Every picture — the
+scenes and the map alike — is drawn in code; no photographs are used.
 
-## The six stories
+## The 13 drawn stories
 
-1. **Strait of Hormuz — Two tankers hit in the strait** · chip: *2 tankers hit*
-   Two outbound tankers are struck by unidentified projectiles off
-   Khasab, Oman, on Saturday morning — the second in its engine room,
-   about 50 minutes after the first. No casualties in either incident,
-   UKMTO says.
-   Sources: Reuters; The Jerusalem Post; UKMTO warnings 215-26.
-2. **Geneva — 'Killer robot' talks end with a path, no pact** · chip: *rules by 2028*
-   The CCW review conference ends after 4 a.m. on Saturday: 128 states
-   agree to spend two years elaborating an instrument on lethal
-   autonomous weapons. About 100 countries wanted binding rules; the
-   US, Russia and Israel held out, so whether the rules will bind is
-   left open.
-   Sources: Reuters; AFP.
-3. **Antalya — COP31 runs into overtime, still no deal** · chip: *COP32: Addis Ababa*
-   The UN climate summit runs into an extra day with no final deal:
-   work crews pack up the venue while negotiators chase a third draft
-   that still omits any mention of fossil fuels. Ethiopia is confirmed
-   as host of COP32 in Addis Ababa in 2027.
-   Sources: Associated Press; Reuters.
-4. **Basra — Power-station fire kills at least four** · chip: *800 MW offline*
-   A fire breaks out around 6 a.m. at the Hartha power station north of
-   Basra, spreads to nearby houses and shuts the plant. At least four
-   people are killed and 30 injured, officials say; the cause is not
-   yet known.
-   Sources: Reuters; Al Jazeera.
-5. **Cambridge, Mass. — Race to verify the Riemann claim** · chip: *167 years open*
-   A day after an Anthropic researcher published a claimed,
-   AI-assisted proof of the Riemann hypothesis as some 17 million
-   lines of Lean, independent teams at MIT and Carnegie Mellon compile
-   it successfully. Deeper checks for trickery continue — and a rival,
-   all-human proof surfaces the same day. Nothing is settled yet.
-   Sources: Quanta Magazine; The Wall Street Journal; AFP.
-6. **Davao — Everyone walks away from flight PX19** · chip: *146 safe*
-   Air Niugini flight PX19, a Boeing 767 from Hong Kong to Port
-   Moresby, diverts to Davao shortly after midnight after a fire
-   warning in its right engine. All 137 passengers and 9 crew leave by
-   the emergency slides; no one is hurt.
-   Sources: Associated Press; Channel NewsAsia.
+1. **New York · Markets — AI sell-off turns into a rout.** Nasdaq's
+   worst week since 2020 (−10%); the S&P 500 slides 3.7% into
+   correction; Nvidia tumbles 14% on a reported accounting probe; $4tn
+   wiped from US stocks. *Bloomberg · Reuters · WSJ*
+2. **Geneva · Arms control — 'Killer robot' talks end with a path, no
+   pact.** Talks run past 4 a.m.; 128 states agree to spend two years
+   drafting rules for lethal autonomous weapons, binding or not.
+   *Reuters · AFP*
+3. **Strait of Hormuz · Security — Two tankers hit in the strait.** A
+   second outbound tanker is struck in its engine room 50 minutes
+   after the first, off Khasab, Oman; no casualties. *Reuters · UKMTO*
+4. **Antalya · Climate — COP31 runs into overtime, still no deal.**
+   Crews pack up as negotiators chase a third draft; COP32 goes to
+   Addis Ababa in 2027. *AP · Reuters*
+5. **Basra · Iraq — Power-station fire kills at least four.** The
+   Hartha plant blaze spreads to homes and shuts the 800 MW station;
+   30 injured. *Reuters · Al Jazeera*
+6. **Gaza City · War — Strike on aid vehicle kills three.** A car
+   carrying food for World Central Kitchen is hit, medics say.
+   *Reuters*
+7. **Vanuatu · Earthquake — Magnitude 6.9 quake strikes off Vanuatu.**
+   The early-hours Pacific tremor is followed by a 6.3. *USGS*
+8. **Kyiv · Politics — Zelenskiy relays Trump's message to Europe.**
+   Trump told Europe it spends a lot on Ukraine; Miami G20 talks
+   offered. *Reuters*
+9. **Sinaloa · Crime — Mexico captures drug lord 'El Chapo Isidro'.**
+   Soldiers seize Fausto Isidro Meza Flores and two other cartel
+   leaders. *Reuters*
+10. **Gulf of Finland · Security — Russian cargo ship struck by
+    drones.** Moscow says a Kaliningrad-bound vessel was hit by two
+    drones; Finland reports it on fire. *Reuters* — tagged CLAIM.
+11. **Warsaw · NATO — NATO will defend 'every inch' of Poland.**
+    Rutte's pledge follows Russian missiles and a drone down in
+    Poland on Friday. *Reuters · PAP*
+12. **Cambridge, Mass. · Science — Race to verify the Riemann claim.**
+    Teams compile the 17-million-line Lean proof within a day;
+    checks go on. *Quanta · WSJ*
+13. **Davao · Aviation — Everyone walks away from flight PX19.** The
+    Hong Kong–Port Moresby 767 diverts on an engine fire warning;
+    all 146 leave by the slides. *AP · CNA*
 
-Every story is an event of 21 November 2026 (in its local time zone),
-cross-checked against at least two reliable reports before it was
-drawn. Several of the day's biggest headlines were left out on
-purpose: the UK–EU reset summit, the Danish expulsion over a foiled
-plot, the overnight barrage on Ukraine and the pancreatic-cancer
-trial results all turned out, on inspection, to be events of
-20 November that Saturday's papers were still leading with.
+Stories 14–34 run as one-line briefs along the bottom — from a second
+big quake in the Banda Sea to Pakistan's contract overhaul — each with
+its place and source named.
+
+## Date discipline
+
+Every story on the page happened, or was first reported, on Saturday
+21 November 2026 (in some time zone), cross-checked against named
+sources before it was drawn. The Date Check box names the day's
+biggest traps that were **left out as other days' news**: the World
+Court's Myanmar genocide ruling, the Tbilisi gas blast and South
+Korea's Han verdict (Thu 19 Nov); the UK–EU summit deals, the Brazil
+supercell storm, Russia's 400-drone barrage and the Gupta sentencing
+(Fri 20 Nov); the measles-status revocation and Senegal's PASTEF
+decision (Tue 17 Nov).
 
 ## How it was made
 
-The backdrop and the six scenes were drawn as separate illustrations
-in one consistent flat watercolour style, with no text in the artwork
-itself; they live in `art/`. All type — the date, headlines, fact
-lines, tags and number chips — was then set programmatically over the
-artwork by `tools/compose.py`, so every word and figure is exact and
-legible. A one-line inventory runs along the bottom: *a strait struck ·
-a pact postponed · a summit in overtime · a fatal fire · a proof to
-check · a safe landing*.
+`tools/compose.py` draws the entire page programmatically with PIL —
+masthead, tally bar, number strip, the 13 flat-vector scenes, the
+dot-grid world map with its pins, all headlines, summaries, briefs
+and the date-check box — and writes `entry.png`. Rebuild it with:
+
+```sh
+python3 tools/compose.py
+```
+
+(An earlier six-panel edition of this entry used painted scenes kept
+in `art/`; the front-page edition is drawn entirely in code and does
+not use them.)
 
 ## Run it
 

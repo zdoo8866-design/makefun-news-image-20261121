@@ -1,7 +1,9 @@
 // Entry point for the make.fun "news-image-20261121" submission.
 //
-// The deliverable is entry.png beside this file: a 1024x1024 front page
-// that sums up the world news of 21 November 2026 in six panels. The
+// The deliverable is entry.png beside this file: a 1024x1024 newspaper
+// front page that sums up the world news of Saturday 21 November 2026
+// in 34 stories — 13 drawn cards, a where-it-happened map and 21
+// one-line briefs, closed by a date-check box. The
 // grader mounts this repository read-only and expects the program to
 // stage the image into $MAKEFUN_OUTPUT_DIR (falling back to /output).
 // Before staging, the program checks the file against the competition's
