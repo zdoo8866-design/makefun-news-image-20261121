@@ -190,6 +190,16 @@ BRIEFS = [
     (34, "Washington", "Trump floats chief of staff for 2028", "AFP"),
 ]
 
+# region of each brief; its number is drawn in the region-bar colour
+BRIEF_REGION = {
+    14: "ASIA", 15: "EUROPE", 16: "EUROPE", 17: "MIDDLE EAST", 18: "EUROPE",
+    19: "EUROPE", 20: "ASIA", 21: "ASIA", 22: "ASIA", 23: "ASIA",
+    24: "AMERICAS", 25: "AMERICAS", 26: "MIDDLE EAST", 27: "MIDDLE EAST",
+    28: "EUROPE", 29: "AFRICA", 30: "AFRICA", 31: "OCEANIA", 32: "ASIA",
+    33: "ASIA", 34: "AMERICAS",
+}
+REGION_COL = {name: col for name, _cnt, col in REGIONS}
+
 # map pins for the 13 cards: (number, lon, lat)
 PINS = [
     (1, -74.0, 40.7), (2, 6.1, 46.2), (3, 56.3, 26.2), (4, 30.7, 36.9),
@@ -379,7 +389,7 @@ def sc_hormuz(w, h):
 def sc_antalya(w, h):
     t, d = _tile(w, h, (236, 224, 192))
     # draft document sheet
-    x0, y0, x1, y1 = w * 0.3, h * 0.08, w * 0.74, h * 0.94
+    x0, y0, x1, y1 = w * 0.3, h * 0.02, w * 0.74, h * 0.86
     d.rectangle([x0 + 4, y0 + 5, x1 + 4, y1 + 5], fill=(206, 194, 164))
     d.rectangle([x0, y0, x1, y1], fill=(252, 250, 242), outline=(170, 160, 130), width=1)
     d.text(((x0 + x1) / 2, y0 + h * 0.07), "DRAFT DEAL", font=F(SANS_B, max(9, h // 9)),
@@ -387,9 +397,9 @@ def sc_antalya(w, h):
     for i in range(3):
         yy = y0 + h * (0.3 + i * 0.13)
         d.line([x0 + w * 0.05, yy, x1 - w * 0.05, yy], fill=(168, 168, 158), width=2)
-    d.text(((x0 + x1) / 2, y0 + h * 0.68), "FOSSIL FUELS", font=F(SANS_B, max(9, h // 8)),
+    d.text(((x0 + x1) / 2, y0 + h * 0.60), "FOSSIL FUELS", font=F(SANS_B, max(9, h // 8)),
            fill=(60, 60, 60), anchor="ma")
-    d.line([x0 + w * 0.03, y0 + h * 0.75, x1 - w * 0.03, y0 + h * 0.72], fill=RED, width=max(3, h // 22))
+    d.line([x0 + w * 0.03, y0 + h * 0.665, x1 - w * 0.03, y0 + h * 0.635], fill=RED, width=max(3, h // 22))
     # globe at left
     gx, gy, gr = w * 0.16, h * 0.42, min(w * 0.11, h * 0.3)
     d.ellipse([gx - gr, gy - gr, gx + gr, gy + gr], fill=(86, 140, 178))
@@ -580,7 +590,7 @@ def sc_riemann(w, h):
     # chalk check
     d.line([w * 0.68, h * 0.58, w * 0.76, h * 0.72], fill=(246, 220, 92), width=max(4, h // 14))
     d.line([w * 0.76, h * 0.72, w * 0.94, h * 0.4], fill=(246, 220, 92), width=max(4, h // 14))
-    d.text((w * 0.64, h * 0.78), "17M lines", font=F(SANS_B, max(8, h // 9)), fill=(206, 214, 206))
+    d.text((w * 0.64, h * 0.68), "17M lines", font=F(SANS_B, max(8, h // 9)), fill=(206, 214, 206))
     return t
 
 def sc_davao(w, h):
@@ -591,7 +601,7 @@ def sc_davao(w, h):
     d.line([0, h * 0.86, w, h * 0.86], fill=(240, 200, 90), width=2)
     # airliner side profile
     ax, ay, aw = w * 0.1, h * 0.34, w * 0.72
-    d.rounded_rectangle([ax, ay, ax + aw, ay + h * 0.2], int(h * 0.1), fill=(232, 232, 228))
+    d.rounded_rectangle([ax, ay, ax + aw, ay + h * 0.2], int(h * 0.05), fill=(232, 232, 228))
     d.polygon([(ax + aw * 0.86, ay - h * 0.16), (ax + aw * 0.99, ay + h * 0.02),
                (ax + aw * 0.86, ay + h * 0.04)], fill=(196, 40, 52))
     d.polygon([(ax + aw * 0.3, ay + h * 0.16), (ax + aw * 0.52, ay + h * 0.16),
@@ -687,7 +697,7 @@ for (name, cnt, col), mn in zip(REGIONS, mins):
     x += wseg
 
 # the day in numbers
-sy, sh = 180, 48
+sy, sh = 178, 42
 d.rectangle([MX, sy, MX + 92, sy + sh], fill=RED)
 lab = wrap(d, "THE DAY IN NUMBERS", F(SANS_B, 12), 84)
 ly = sy + (sh - len(lab) * 13) / 2
@@ -698,27 +708,27 @@ sx = MX + 100
 scw = (W - MX - sx) / 6
 for i, (big, cap) in enumerate(STATS):
     cx = sx + i * scw
-    bf = fit(d, big, SERIF_B, 25, scw - 8, floor=14)
+    bf = fit(d, big, SERIF_B, 23, scw - 8, floor=14)
     d.text((cx + scw / 2, sy), big, font=bf, fill=DARKRED, anchor="ma")
     cf = F(SANS_R, 9.5)
     for j, ln in enumerate(wrap(d, cap, cf, scw - 10)[:2]):
-        d.text((cx + scw / 2, sy + 28 + j * 11), ln, font=cf, fill=SOFT, anchor="ma")
-d.line([(MX, 236), (W - MX, 236)], fill=INK, width=1)
+        d.text((cx + scw / 2, sy + 24 + j * 10.5), ln, font=cf, fill=SOFT, anchor="ma")
+d.line([(MX, 228), (W - MX, 228)], fill=INK, width=1)
 
 # ------------------------------------------------------------- heroes -----
-HY, HH = 242, 246
+HY, HH = 234, 218
 HW = (CW - 2 * 13) // 3   # 322
 for i, hd in enumerate(HEROES):
     x = MX + i * (HW + 13)
     y = HY
     d.rectangle([x, y, x + HW, y + HH], fill=CARD, outline=BORDER, width=1)
-    tile = SCENES[hd["scene"]](HW, 116)
+    tile = SCENES[hd["scene"]](HW, 96)
     canvas.paste(tile, (x, y))
-    by = y + 116 - 17
-    d.rectangle([x, by, x + HW, y + 116], fill=NAVY + (238,))
+    by = y + 96 - 17
+    d.rectangle([x, by, x + HW, y + 96], fill=NAVY + (238,))
     d.text((x + 8, by + 2.5), hd["bl"], font=F(SANS_B, 10), fill=(255, 255, 255))
     d.text((x + HW - 8, by + 2.5), hd["br"], font=F(SANS_B, 10), fill=GOLD, anchor="ra")
-    ty = y + 116 + 6
+    ty = y + 96 + 6
     badge(d, x + 13, ty + 7, 8.5, hd["n"], 9)
     d.text((x + 27, ty + 1), f"{hd['loc']} · {hd['cat']}", font=F(SANS_B, 10.5),
            fill=DARKRED)
@@ -727,28 +737,28 @@ for i, hd in enumerate(HEROES):
     hf = F(SERIF_B, 19)
     for ln in wrap(d, hd["head"], hf, HW - 20)[:2]:
         d.text((x + 10, hyy), ln, font=hf, fill=INK)
-        hyy += 23
-    bf = F(SANS_R, 11.5)
+        hyy += 21
+    bf = F(SANS_R, 11)
     for ln in wrap(d, hd["body"], bf, HW - 20)[:3]:
-        d.text((x + 10, hyy + 2), ln, font=bf, fill=(52, 58, 60))
-        hyy += 15
-    d.text((x + 10, y + HH - 16), hd["src"], font=F(SANS_I, 9.5), fill=SOFT)
+        d.text((x + 10, hyy + 1), ln, font=bf, fill=(52, 58, 60))
+        hyy += 12
+    d.text((x + 10, hyy + 3), hd["src"], font=F(SANS_I, 9.5), fill=SOFT)
 
 # ------------------------------------------------------------- smalls -----
 GY = HY + HH + 6
 SW = (CW - 4 * 10) / 5    # 190.4
-SH = 118
+SH = 148
 for i, sd_ in enumerate(SMALLS):
     r, c = divmod(i, 5)
     x = int(MX + c * (SW + 10))
     y = GY + r * (SH + 6)
     wpx = int(SW)
     d.rectangle([x, y, x + wpx, y + SH], fill=CARD, outline=BORDER, width=1)
-    tile = SCENES[sd_["scene"]](wpx, 40)
+    tile = SCENES[sd_["scene"]](wpx, 68)
     canvas.paste(tile, (x, y))
-    d.rectangle([x, y + 28, x + wpx, y + 40], fill=NAVY + (238,))
-    d.text((x + 6, y + 29.5), sd_["band"], font=F(SANS_B, 8), fill=(255, 255, 255))
-    ty = y + 44
+    d.rectangle([x, y + 56, x + wpx, y + 68], fill=NAVY + (238,))
+    d.text((x + 6, y + 57.5), sd_["band"], font=F(SANS_B, 8.5), fill=(255, 255, 255))
+    ty = y + 72
     badge(d, x + 9, ty + 5, 6, sd_["n"], 7.5)
     d.text((x + 19, ty), f"{sd_['loc']} · {sd_['cat']}", font=F(SANS_B, 8), fill=DARKRED)
     tf = F(SANS_B, 7.5)
@@ -763,11 +773,11 @@ for i, sd_ in enumerate(SMALLS):
         hyy += 14.5
     segs = [(sd_["body"] + " ", F(SANS_R, 9.6), (52, 58, 60)),
             ("\u2014 " + sd_["src"], F(SANS_I, 9.6), SOFT)]
-    lines = rich_wrap(d, segs, wpx - 14)[:3]
+    lines = rich_wrap(d, segs, wpx - 14)[:2]
     draw_rich(d, x + 7, hyy + 1, lines, 11, F(SANS_R, 9.6))
 
 # ------------------------------------------------------------- bottom -----
-BY = GY + 2 * SH + 16
+BY = GY + 2 * SH + 14
 d.text((MX, BY), "WHERE IT HAPPENED", font=F(SANS_B, 12.5), fill=INK)
 d.text((MX + 168, BY + 2), "numbers match the stories", font=F(SANS_I, 9.5), fill=SOFT)
 d.text((428, BY), "ALSO ON SATURDAY", font=F(SANS_B, 12.5), fill=INK)
@@ -776,7 +786,7 @@ d.text((W - MX, BY + 2), "place · what happened · source", font=F(SANS_I, 9.5)
        fill=SOFT, anchor="ra")
 
 # map: dot grid over the continent polygons
-mapx, mapy, mapw, maph = MX + 4, BY + 24, 392, 138
+mapx, mapy, mapw, maph = MX + 4, BY + 24, 392, 118
 def in_poly(lon, lat):
     for poly in POLYS:
         inside = False
@@ -814,10 +824,10 @@ for num, lon, lat in PINS:
     d.ellipse([px - 7, py - 7, px + 7, py + 7], fill=RED, outline=(255, 255, 255), width=1)
     d.text((px, py - 0.5), str(num), font=F(SANS_B, 8), fill=(255, 255, 255), anchor="mm")
 ly = mapy + maph + 6
-d.text((MX, ly), "Red pins: the 13 drawn stories · teal dots: the briefs",
-       font=F(SANS_R, 9), fill=SOFT)
-d.text((MX, ly + 12), "Tags: REPORTED = named sources · CLAIM = one side\u2019s account",
-       font=F(SANS_R, 9), fill=SOFT)
+d.text((MX, ly), "Red pins: the 13 stories · teal dots + coloured numbers: the briefs, by region",
+       font=F(SANS_R, 8.5), fill=SOFT)
+d.text((MX, ly + 12), "Tags: REPORTED = named sources · CLAIM = one side\u2019s account · FORECAST = expected",
+       font=F(SANS_R, 8.5), fill=SOFT)
 
 # briefs, two columns -- font auto-fitted so the columns end above the
 # date-check box (measured before anything is drawn)
@@ -849,7 +859,8 @@ for ci, (items, _t) in enumerate(layout):
     bx = 428 + ci * (colw + 12)
     yy = BRIEF_TOP
     for num, lines in items:
-        d.text((bx, yy), str(num), font=F(SANS_B, bsize), fill=RED)
+        d.text((bx, yy), str(num), font=F(SANS_B, bsize),
+               fill=REGION_COL[BRIEF_REGION[num]])
         yy = draw_rich(d, bx + 17, yy, lines, blh, F(SANS_R, bsize)) + 1.4
 
 # date check box (tick drawn with lines: the serif/sans fonts lack a
