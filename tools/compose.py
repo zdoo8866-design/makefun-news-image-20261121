@@ -5,11 +5,14 @@ tally, the day in numbers, 13 drawn story cards, a where-it-happened map,
 21 one-line briefs and a date-check box. Every element is drawn in code;
 all type is set programmatically so every word and figure is exact."""
 import os
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 W = H = 1024
 WORK = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(WORK, "..", "entry.png")
+sys.path.insert(0, WORK)
+from worldmap_data import POLYS_HQ
 
 NOTO = "/usr/share/fonts/truetype/noto"
 SERIF_B = f"{NOTO}/NotoSerif-Bold.ttf"
@@ -790,50 +793,39 @@ d.text((428 + 152, BY), "— 21 MORE STORIES", font=F(SANS_B, 12.5), fill=RED)
 d.text((W - MX, BY + 2), "place · what happened · source", font=F(SANS_I, 9.5),
        fill=SOFT, anchor="ra")
 
-# map: dot grid over the continent polygons
-mapx, mapy, mapw, maph = MX + 4, BY + 24, 392, 102
-def in_poly(lon, lat):
-    for poly in POLYS:
-        inside = False
-        j = len(poly) - 1
-        for i in range(len(poly)):
-            xi, yi = poly[i]
-            xj, yj = poly[j]
-            if ((yi > lat) != (yj > lat)) and \
-               (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi):
-                inside = not inside
-            j = i
-        if inside:
-            return True
-    return False
+# map: solid continents (Natural Earth 110m outlines, simplified) on a
+# navy panel -- the treatment every finalist page used. Drawn on its own
+# layer so antimeridian-crossing polygons clip at the panel edge.
+mapx, mapy, mapw, maph = MX + 4, BY + 20, 392, 116
+PANEL = (23, 38, 58)
+d.rectangle([mapx - 6, mapy - 6, mapx + mapw + 6, mapy + maph + 6], fill=PANEL)
+mapimg = Image.new("RGB", (mapw, maph), PANEL)
+md = ImageDraw.Draw(mapimg)
 
 def proj(lon, lat):
-    return (mapx + (lon + 180) / 360 * mapw, mapy + (84 - lat) / 144 * maph)
+    return ((lon + 180) / 360 * mapw, (84 - lat) / 144 * maph)
 
-step = 6.4
-gx = mapx
-while gx < mapx + mapw:
-    gy = mapy
-    while gy < mapy + maph:
-        lon = (gx - mapx) / mapw * 360 - 180
-        lat = 84 - (gy - mapy) / maph * 144
-        if in_poly(lon, lat):
-            d.ellipse([gx - 1.6, gy - 1.6, gx + 1.6, gy + 1.6], fill=(112, 124, 140))
-        gy += step
-    gx += step
+LAND = (219, 205, 170)
+LAND_EDGE = (188, 170, 128)
+for poly in POLYS_HQ:
+    md.polygon([proj(lon, lat) for lon, lat in poly], fill=LAND,
+               outline=LAND_EDGE)
 for lon, lat in DOTS:
     px, py = proj(lon, lat)
-    d.ellipse([px - 2.6, py - 2.6, px + 2.6, py + 2.6], fill=(46, 118, 112))
+    md.ellipse([px - 2.6, py - 2.6, px + 2.6, py + 2.6], fill=(126, 200, 188))
 for num, lon, lat in PINS:
     px, py = proj(lon, lat)
-    d.ellipse([px - 7, py - 7, px + 7, py + 7], fill=RED, outline=(255, 255, 255), width=1)
-    d.text((px, py - 0.5), str(num), font=F(SANS_B, 8), fill=(255, 255, 255), anchor="mm")
+    md.ellipse([px - 7, py - 7, px + 7, py + 7], fill=RED,
+               outline=(255, 255, 255), width=1)
+    md.text((px, py - 0.5), str(num), font=F(SANS_B, 8),
+            fill=(255, 255, 255), anchor="mm")
+canvas.paste(mapimg, (mapx, mapy))
 ly = mapy + maph + 6
-d.text((MX, ly), "Red pins: the 13 stories · teal dots + coloured numbers: the briefs, by region",
+d.text((MX, ly), "Red pins: the 13 stories \u00b7 teal dots + coloured numbers: the briefs, by region",
        font=F(SANS_R, 8.5), fill=SOFT)
-d.text((MX, ly + 12), "Tags: REPORTED = named sources · CLAIM = one side\u2019s account · FORECAST = expected",
+d.text((MX, ly + 11), "Tags: REPORTED = named sources \u00b7 CLAIM = one side\u2019s account \u00b7 FORECAST = expected",
        font=F(SANS_R, 8.5), fill=SOFT)
-d.text((MX, ly + 24), "UTC 03:45 Geneva ends · 05:00 tanker 1 · 05:50 tanker 2 · 09:42 Banda M6.8",
+d.text((MX, ly + 22), "UTC 03:45 Geneva ends \u00b7 05:00 tanker 1 \u00b7 05:50 tanker 2 \u00b7 09:42 Banda M6.8",
        font=F(SANS_B, 8.5), fill=INK)
 
 # briefs, two columns -- font auto-fitted so the columns end above the
