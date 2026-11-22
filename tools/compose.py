@@ -6,7 +6,7 @@ tally, the day in numbers, 13 drawn story cards, a where-it-happened map,
 all type is set programmatically so every word and figure is exact."""
 import os
 import sys
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 W = H = 1024
 WORK = os.path.dirname(os.path.abspath(__file__))
@@ -59,9 +59,18 @@ def fit(d, text, path, size, maxw, floor=10):
     return F(path, size)
 
 def badge(d, cx, cy, r, num, fsize):
-    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=RED)
-    d.text((cx, cy), str(num), font=F(SANS_B, fsize), fill=(255, 255, 255),
-           anchor="mm")
+    # drawn on a 4x tile and downscaled: a 1x PIL ellipse is visibly
+    # pixel-stepped, and these numbered badges sit on every card
+    ss = 4
+    R = int(round(r * ss)) + ss
+    tile = Image.new("RGBA", (R * 2, R * 2), (0, 0, 0, 0))
+    td = ImageDraw.Draw(tile)
+    rr = r * ss
+    td.ellipse([R - rr, R - rr, R + rr, R + rr], fill=RED + (255,))
+    td.text((R, R), str(num), font=F(SANS_B, int(fsize * ss)),
+            fill=(255, 255, 255, 255), anchor="mm")
+    tile = tile.resize((R * 2 // ss, R * 2 // ss), Image.LANCZOS)
+    canvas.paste(tile, (int(cx - R // ss), int(cy - R // ss)), tile)
 
 def pill(d, x, y, label):
     f = F(SANS_B, 8)
@@ -309,9 +318,29 @@ POLYS = [
 def _tile(w, h, bg):
     t = Image.new("RGB", (w, h), bg)
     return t, ImageDraw.Draw(t, "RGBA")
+SS = 3
+
+def vgrad(d, w, y0, y1, top, bottom):
+    """Vertical gradient band drawn as 1px lines; scenes render at 3x,
+    so the steps vanish in the downscale."""
+    y0, y1 = int(y0), int(y1)
+    span = max(1, y1 - y0)
+    for yy in range(y0, y1):
+        f = (yy - y0) / span
+        col = tuple(int(top[i] + (bottom[i] - top[i]) * f) for i in range(3))
+        d.line([(0, yy), (w, yy)], fill=col)
+
+def render_scene(name, w, h):
+    """Render a scene at 3x and downscale: smooth edges instead of
+    pixel-stepped shapes, plus a whisper of grain so flat fills read
+    as print rather than plastic."""
+    t = SCENES[name](w * SS, h * SS).resize((w, h), Image.LANCZOS)
+    noise = Image.effect_noise((w, h), 5).convert("RGB")
+    return ImageChops.add(t, noise, 1, -128)
 
 def sc_markets(w, h):
     t, d = _tile(w, h, (22, 33, 52))
+    vgrad(d, w, 0, h, (30, 45, 70), (13, 19, 32))
     # skyline silhouette
     rng = [0.52, 0.66, 0.44, 0.72, 0.58, 0.8, 0.5, 0.64, 0.56, 0.7, 0.47, 0.62]
     bw = w / len(rng)
@@ -337,6 +366,7 @@ def sc_markets(w, h):
 
 def sc_geneva(w, h):
     t, d = _tile(w, h, (52, 78, 92))
+    vgrad(d, w, 0, h, (64, 92, 108), (40, 62, 76))
     # UN-palace columns behind
     for i in range(6):
         x = w * (0.06 + i * 0.155)
@@ -372,7 +402,8 @@ def _tanker(d, x, y, s, smoke=False):
 
 def sc_hormuz(w, h):
     t, d = _tile(w, h, (188, 208, 220))
-    d.rectangle([0, h * 0.52, w, h], fill=(43, 84, 110))
+    vgrad(d, w, 0, h * 0.52, (208, 226, 238), (176, 196, 212))
+    vgrad(d, w, h * 0.52, h, (60, 104, 130), (32, 68, 92))
     for i in range(9):  # wave ticks
         x = (i * 53) % int(w)
         y = h * (0.62 + (i % 3) * 0.11)
@@ -391,6 +422,7 @@ def sc_hormuz(w, h):
 
 def sc_antalya(w, h):
     t, d = _tile(w, h, (236, 224, 192))
+    vgrad(d, w, 0, h, (240, 230, 200), (228, 214, 176))
     # draft document sheet
     x0, y0, x1, y1 = w * 0.3, h * 0.02, w * 0.74, h * 0.86
     d.rectangle([x0 + 4, y0 + 5, x1 + 4, y1 + 5], fill=(206, 194, 164))
@@ -418,6 +450,7 @@ def sc_antalya(w, h):
 
 def sc_basra(w, h):
     t, d = _tile(w, h, (206, 170, 142))
+    vgrad(d, w, 0, h, (218, 184, 152), (190, 154, 124))
     base = h * 0.86
     sil = (64, 56, 52)
     # cooling tower + chimney + blocks
@@ -443,6 +476,7 @@ def sc_basra(w, h):
 
 def sc_gaza(w, h):
     t, d = _tile(w, h, (228, 210, 176))
+    vgrad(d, w, 0, h, (240, 224, 190), (214, 194, 156))
     d.ellipse([w * 0.78, h * 0.08, w * 0.92, h * 0.3], fill=(246, 200, 92))  # sun
     ground = h * 0.78
     d.rectangle([0, ground, w, h], fill=(198, 176, 140))
@@ -471,7 +505,8 @@ def sc_gaza(w, h):
 
 def sc_vanuatu(w, h):
     t, d = _tile(w, h, (168, 202, 220))
-    d.rectangle([0, h * 0.55, w, h], fill=(52, 110, 148))
+    vgrad(d, w, 0, h * 0.55, (188, 218, 236), (156, 190, 210))
+    vgrad(d, w, h * 0.55, h, (66, 124, 162), (38, 92, 126))
     # island mound
     d.polygon([(w * 0.3, h * 0.56), (w * 0.44, h * 0.34), (w * 0.56, h * 0.3),
                (w * 0.7, h * 0.56)], fill=(96, 138, 84))
@@ -495,6 +530,7 @@ def sc_banda(w, h):
 
 def sc_kyiv(w, h):
     t, d = _tile(w, h, (48, 64, 94))
+    vgrad(d, w, 0, h, (58, 76, 110), (36, 50, 78))
     # flags behind: Ukraine bicolour + plain blue
     for (fx, col1, col2) in [(0.1, (74, 128, 190), (246, 206, 60)), (0.78, (36, 62, 120), (36, 62, 120))]:
         d.rectangle([w * fx, h * 0.1, w * fx + w * 0.13, h * 0.28], fill=col1)
@@ -515,6 +551,7 @@ def sc_kyiv(w, h):
 
 def sc_sinaloa(w, h):
     t, d = _tile(w, h, (234, 202, 148))
+    vgrad(d, w, 0, h * 0.8, (244, 216, 162), (226, 190, 134))
     d.ellipse([w * 0.82, h * 0.06, w * 0.96, h * 0.26], fill=(246, 190, 80))
     d.rectangle([0, h * 0.8, w, h], fill=(206, 168, 116))
     # cacti
@@ -542,7 +579,8 @@ def sc_sinaloa(w, h):
 
 def sc_finland(w, h):
     t, d = _tile(w, h, (148, 166, 182))
-    d.rectangle([0, h * 0.58, w, h], fill=(70, 96, 116))
+    vgrad(d, w, 0, h * 0.58, (170, 186, 200), (136, 154, 170))
+    vgrad(d, w, h * 0.58, h, (86, 112, 132), (56, 80, 100))
     # cargo ship
     sx, sy, sw = w * 0.12, h * 0.58, w * 0.52
     d.polygon([(sx, sy), (sx + sw, sy), (sx + sw * 0.9, sy + h * 0.14), (sx + sw * 0.08, sy + h * 0.14)],
@@ -569,6 +607,7 @@ def sc_finland(w, h):
 
 def sc_warsaw(w, h):
     t, d = _tile(w, h, (28, 48, 80))
+    vgrad(d, w, 0, h, (36, 58, 96), (20, 38, 66))
     cx, cy = w * 0.5, h * 0.46
     s = min(w * 0.2, h * 0.36)
     # shield
@@ -588,6 +627,7 @@ def sc_warsaw(w, h):
 
 def sc_riemann(w, h):
     t, d = _tile(w, h, (32, 62, 52))
+    vgrad(d, w, 0, h, (38, 70, 60), (26, 54, 44))
     d.text((w * 0.08, h * 0.1), "\u03b6(s) = 0", font=F(SERIF_I, max(14, h // 4)),
            fill=(240, 242, 236))
     d.text((w * 0.6, h * 0.14), "1 + 1/2\u02e2 + 1/3\u02e2 + \u2026", font=F(SERIF_I, max(9, h // 8)),
@@ -730,7 +770,7 @@ for i, hd in enumerate(HEROES):
     x = MX + i * (HW + 13)
     y = HY
     d.rectangle([x, y, x + HW, y + HH], fill=CARD, outline=BORDER, width=1)
-    tile = SCENES[hd["scene"]](HW, 96)
+    tile = render_scene(hd["scene"], HW, 96)
     canvas.paste(tile, (x, y))
     by = y + 96 - 17
     d.rectangle([x, by, x + HW, y + 96], fill=NAVY + (238,))
@@ -762,7 +802,7 @@ for i, sd_ in enumerate(SMALLS):
     y = GY + r * (SH + 6)
     wpx = int(SW)
     d.rectangle([x, y, x + wpx, y + SH], fill=CARD, outline=BORDER, width=1)
-    tile = SCENES[sd_["scene"]](wpx, 68)
+    tile = render_scene(sd_["scene"], wpx, 68)
     canvas.paste(tile, (x, y))
     d.rectangle([x, y + 56, x + wpx, y + 68], fill=NAVY + (238,))
     d.text((x + 6, y + 57.5), sd_["band"], font=F(SANS_B, 8.5), fill=(255, 255, 255))
@@ -799,11 +839,12 @@ d.text((W - MX, BY + 2), "place · what happened · source", font=F(SANS_I, 9.5)
 mapx, mapy, mapw, maph = MX + 4, BY + 20, 392, 116
 PANEL = (23, 38, 58)
 d.rectangle([mapx - 6, mapy - 6, mapx + mapw + 6, mapy + maph + 6], fill=PANEL)
-mapimg = Image.new("RGB", (mapw, maph), PANEL)
+MSS = 3
+mapimg = Image.new("RGB", (mapw * MSS, maph * MSS), PANEL)
 md = ImageDraw.Draw(mapimg)
 
 def proj(lon, lat):
-    return ((lon + 180) / 360 * mapw, (84 - lat) / 144 * maph)
+    return ((lon + 180) / 360 * mapw * MSS, (84 - lat) / 144 * maph * MSS)
 
 LAND = (219, 205, 170)
 LAND_EDGE = (188, 170, 128)
@@ -812,14 +853,15 @@ for poly in POLYS_HQ:
                outline=LAND_EDGE)
 for lon, lat in DOTS:
     px, py = proj(lon, lat)
-    md.ellipse([px - 2.6, py - 2.6, px + 2.6, py + 2.6], fill=(126, 200, 188))
+    md.ellipse([px - 2.6 * MSS, py - 2.6 * MSS, px + 2.6 * MSS, py + 2.6 * MSS],
+               fill=(126, 200, 188))
 for num, lon, lat in PINS:
     px, py = proj(lon, lat)
-    md.ellipse([px - 7, py - 7, px + 7, py + 7], fill=RED,
-               outline=(255, 255, 255), width=1)
-    md.text((px, py - 0.5), str(num), font=F(SANS_B, 8),
+    md.ellipse([px - 7 * MSS, py - 7 * MSS, px + 7 * MSS, py + 7 * MSS],
+               fill=RED, outline=(255, 255, 255), width=MSS)
+    md.text((px, py - 0.5 * MSS), str(num), font=F(SANS_B, 8 * MSS),
             fill=(255, 255, 255), anchor="mm")
-canvas.paste(mapimg, (mapx, mapy))
+canvas.paste(mapimg.resize((mapw, maph), Image.LANCZOS), (mapx, mapy))
 ly = mapy + maph + 6
 d.text((MX, ly), "Red pins: the 13 stories \u00b7 teal dots + coloured numbers: the briefs, by region",
        font=F(SANS_R, 8.5), fill=SOFT)
