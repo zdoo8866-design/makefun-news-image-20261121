@@ -82,7 +82,7 @@ REGIONS = [  # (label, count, colour) -- real tally of the 34 stories
 STATS = [  # (big, caption)
     ("-10%", "Nasdaq's fall this week — its worst since March 2020"),
     ("$4tn", "of US stock value wiped out in the AI rout"),
-    ("M6.9", "earthquake off Vanuatu, followed by a 6.3"),
+    ("M6.8", "earthquake in the Banda Sea; felt in Darwin"),
     ("128", "nations to draft killer-robot rules in Geneva"),
     ("800 MW", "Basra power plant knocked offline by fire"),
     ("146", "people evacuated safely from flight PX19"),
@@ -128,11 +128,11 @@ SMALLS = [
          head="Strike on aid vehicle kills three",
          body="Strike hits car carrying food for World Central "
               "Kitchen, medics say.", src="Reuters"),
-    dict(n=7, scene="vanuatu", loc="VANUATU", cat="EARTHQUAKE", tag="REPORTED",
-         band="VANUATU · M6.9",
-         head="Magnitude 6.9 quake strikes off Vanuatu",
-         body="Early-hours Pacific tremor followed by a 6.3; "
-              "no damage reports yet.", src="USGS"),
+    dict(n=7, scene="banda", loc="BANDA SEA", cat="EARTHQUAKE", tag="REPORTED",
+         band="BANDA SEA · M6.8",
+         head="Magnitude 6.8 quake in the Banda Sea",
+         body="Saturday-afternoon tremor 226 km NE of Dili; "
+              "shaking felt in Darwin.", src="Reuters · GFZ"),
     dict(n=8, scene="kyiv", loc="KYIV", cat="POLITICS", tag="REPORTED",
          band="KYIV · ZELENSKIY",
          head="Zelenskiy relays Trump\u2019s message to Europe",
@@ -167,7 +167,7 @@ SMALLS = [
 
 # (number, place, fact, source) -- the 21 briefs, stories 14-34
 BRIEFS = [
-    (14, "Banda Sea", "M6.8 quake off Dili; felt in Darwin", "Reuters"),
+    (14, "Port-Vila", "M4.9 quake off Vanuatu at 07:20 UTC", "USGS"),
     (15, "Rome", "Ex-police chief De Gennaro dies at 78", "Reuters"),
     (16, "Moscow", "Wildberries CEO quits after EU sanctions", "Reuters"),
     (17, "Tehran", "China, Russia back Iran nuclear doctrine", "AFP"),
@@ -192,7 +192,7 @@ BRIEFS = [
 
 # region of each brief; its number is drawn in the region-bar colour
 BRIEF_REGION = {
-    14: "ASIA", 15: "EUROPE", 16: "EUROPE", 17: "MIDDLE EAST", 18: "EUROPE",
+    14: "OCEANIA", 15: "EUROPE", 16: "EUROPE", 17: "MIDDLE EAST", 18: "EUROPE",
     19: "EUROPE", 20: "ASIA", 21: "ASIA", 22: "ASIA", 23: "ASIA",
     24: "AMERICAS", 25: "AMERICAS", 26: "MIDDLE EAST", 27: "MIDDLE EAST",
     28: "EUROPE", 29: "AFRICA", 30: "AFRICA", 31: "OCEANIA", 32: "ASIA",
@@ -203,13 +203,13 @@ REGION_COL = {name: col for name, _cnt, col in REGIONS}
 # map pins for the 13 cards: (number, lon, lat)
 PINS = [
     (1, -74.0, 40.7), (2, 6.1, 46.2), (3, 56.3, 26.2), (4, 30.7, 36.9),
-    (5, 47.8, 30.5), (6, 34.3, 31.5), (7, 168.0, -16.5), (8, 30.5, 50.4),
+    (5, 47.8, 30.5), (6, 34.3, 31.5), (7, 128.0, -7.0), (8, 30.5, 50.4),
     (9, -107.4, 25.0), (10, 27.5, 59.9), (11, 21.0, 52.2), (12, -71.1, 42.4),
     (13, 125.6, 7.1),
 ]
 # dots for briefs: (lon, lat)
 DOTS = [
-    (130.0, -6.0), (12.5, 41.9), (37.6, 55.8), (51.4, 35.7), (12.6, 55.7),
+    (167.0, -17.5), (12.5, 41.9), (37.6, 55.8), (51.4, 35.7), (12.6, 55.7),
     (7.7, 45.1), (123.2, 13.6), (121.0, 14.6), (92.0, 21.4), (-59.6, 13.1),
     (35.2, 31.9), (11.2, 10.3), (28.5, 12.5), (151.2, -33.9), (72.9, 19.1),
     (67.0, 24.9), (-77.0, 38.9), (31.5, 49.5),
@@ -485,6 +485,11 @@ def sc_vanuatu(w, h):
     d.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=(232, 92, 40))
     return t
 
+def sc_banda(w, h):
+    # Banda Sea quake: same island-and-crack motif as the Vanuatu scene
+    # (both are Pacific island quakes, drawn in code, not a photograph).
+    return sc_vanuatu(w, h)
+
 def sc_kyiv(w, h):
     t, d = _tile(w, h, (48, 64, 94))
     # flags behind: Ukraine bicolour + plain blue
@@ -621,7 +626,7 @@ def sc_davao(w, h):
 SCENES = {
     "markets": sc_markets, "geneva": sc_geneva, "hormuz": sc_hormuz,
     "antalya": sc_antalya, "basra": sc_basra, "gaza": sc_gaza,
-    "vanuatu": sc_vanuatu, "kyiv": sc_kyiv, "sinaloa": sc_sinaloa,
+    "vanuatu": sc_vanuatu, "banda": sc_banda, "kyiv": sc_kyiv, "sinaloa": sc_sinaloa,
     "finland": sc_finland, "warsaw": sc_warsaw, "riemann": sc_riemann,
     "davao": sc_davao,
 }
@@ -786,7 +791,7 @@ d.text((W - MX, BY + 2), "place · what happened · source", font=F(SANS_I, 9.5)
        fill=SOFT, anchor="ra")
 
 # map: dot grid over the continent polygons
-mapx, mapy, mapw, maph = MX + 4, BY + 24, 392, 118
+mapx, mapy, mapw, maph = MX + 4, BY + 24, 392, 102
 def in_poly(lon, lat):
     for poly in POLYS:
         inside = False
@@ -828,6 +833,8 @@ d.text((MX, ly), "Red pins: the 13 stories · teal dots + coloured numbers: the 
        font=F(SANS_R, 8.5), fill=SOFT)
 d.text((MX, ly + 12), "Tags: REPORTED = named sources · CLAIM = one side\u2019s account · FORECAST = expected",
        font=F(SANS_R, 8.5), fill=SOFT)
+d.text((MX, ly + 24), "UTC 03:45 Geneva ends · 05:00 tanker 1 · 05:50 tanker 2 · 09:42 Banda M6.8",
+       font=F(SANS_B, 8.5), fill=INK)
 
 # briefs, two columns -- font auto-fitted so the columns end above the
 # date-check box (measured before anything is drawn)
@@ -871,12 +878,12 @@ d.line([(MX + 12, DY + 13), (MX + 16, DY + 18)], fill=RED, width=3)
 d.line([(MX + 16, DY + 18), (MX + 25, DY + 7)], fill=RED, width=3)
 dc = [("DATE CHECK  ", F(SANS_B, 10), RED),
       ("Every story on this page happened, or was first reported, on Saturday "
-       "21 November 2026. LEFT OUT AS OTHER DAYS\u2019 NEWS \u2014 Thu 19 Nov: World Court "
+       "21 November 2026. LEFT OUT AS OTHER DAYS\u2019 NEWS \u2014 Sat 24 Oct: Vanuatu M6.9 quake \u00b7 Thu 19 Nov: World Court "
        "rules Myanmar committed genocide \u00b7 Tbilisi gas blast kills six \u00b7 Seoul "
-       "overturns ex-PM Han\u2019s sentence \u00b7 Anthropic\u2019s record IPO debut. Fri 20 Nov: "
+       "overturns ex-PM Han\u2019s sentence. Fri 20 Nov: "
        "UK\u2013EU summit deals signed \u00b7 Brazil supercell storm \u00b7 Russia\u2019s 400-drone "
        "barrage \u00b7 Gupta sentenced in New York. Tue 17 Nov: US loses measles-free "
-       "status \u00b7 Senegal\u2019s PASTEF strikes off President Faye. NOT YET: a binding "
+       "status \u00b7 Senegal\u2019s PASTEF strikes off Faye. NOT YET: a binding "
        "killer-robot treaty (drafting starts now) \u00b7 COP31\u2019s final deal (talks "
        "resume Sunday).", F(SANS_R, 9.8), INK)]
 lines = rich_wrap(d, dc, CW - 42)[:3]
